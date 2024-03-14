@@ -352,6 +352,92 @@
 					</section>
 				</section>
 				<!-- Slide 14 -->
+				<section data-markdown>
+					<textarea data-template>
+						## [Foundation Models for Image Generation]()
+					  </textarea>
+				</section>
+				<!-- Slide 15 -->
+				<section>
+					<section>
+						<p style="font-size: 150%; padding-bottom: 10%;">
+							<a href="#/5"><strong>Classifier-free Guidance</strong></a>
+						</p>
+					</section>
+					<section>
+						In the traditional setup, some generative models, especially those used for tasks like conditional image generation or text-to-image synthesis, might use classifiers to guide the generation process towards the desired outcome. These classifiers can be used to determine how well the generated content matches the target criteria or instructions.
+					</section>
+					<section>
+						However, classifier-free guidance eliminates the need for such external classifiers. Instead, the approach involves training the generative model in a way that it learns to modulate its outputs based on the given conditions or prompts directly, without relying on separate classifier feedback. 
+					</section>
+					<section>
+						This is often achieved by training the model on a mix of conditioned (with specific prompts) and unconditioned (without prompts) data, and then adjusting the generation process based on the desired level of adherence to the prompt.
+					</section>
+					<section>
+						<p>
+							One of the key benefits of classifier-free guidance is that it simplifies the model architecture and training process by removing the need for additional classifier components.
+						</p>
+						<p>
+							It can also potentially lead to more flexible and creative outputs, as the model learns to navigate the space of possible generations more freely.
+						</p>
+					</section>
+				</section>
+				<!-- Slide 16 -->
+				<section>
+					<section>
+						<p style="font-size: 150%; padding-bottom: 10%;">
+							<a href="#/5"><strong>Latent Diffusion</strong></a>
+						</p>
+					</section>
+					<section>
+						Latent diffusion models are a type of generative model that operates in a latent space, which is a compressed representation of data, instead of directly in the pixel space.
+					</section>
+					<section>
+						The latent space is typically much smaller in dimensionality than the original data space, making the model more efficient and faster to train and generate samples from, as compared to traditional diffusion models that operate directly in the pixel or data space.
+					</section>
+				</section>
+				<!-- Slide 17 -->
+				<section>
+					<section>
+						<p style="font-size: 150%; padding-bottom: 10%;">
+							<a href="#/16"><strong>Stable Diffusion</strong></a>
+						</p>
+					</section>
+					<section>
+						Stable Diffusion is powerful text-to-image generation model developed by <a href="https://stability.ai/">StabilityAI</a>.
+					</section>
+					<section>
+						<img src="./examples/assets/sd1.jpeg" alt="">
+					</section>
+					<section>
+						Stable Diffusion is a Latent Diffusion Model that is trained to generate high-quality images from text prompts.
+					</section>
+					<section>
+						To condition the image generation on textual inputs, Stable Diffusion leverages embeddings from a model like CLIP (Contrastive Language–Image Pre-training), which understands and aligns the semantics of text and images. These embeddings guide the reverse diffusion process towards generating images that match the text description.
+					</section>
+					<section>
+						The core of Stable Diffusion's architecture involves an autoencoder that compresses images into a lower-dimensional latent space and decompresses them back to image space. The autoencoder consists of an encoder that maps high-resolution images into a compact latent representation, and a decoder that reconstructs images from this latent space.
+					</section>
+					<section>
+						By operating in a latent space, Stable Diffusion requires less computational power and memory than models that operate directly on pixels, making high-quality text-to-image generation more accessible.
+					</section>
+				</section>
+				<!-- Slide 18 -->
+				<section data-markdown>
+					<textarea data-template>
+						<div id="left">
+							<p>
+								Let's generate some images using Stable Diffusion <br>
+								<p style="padding-top: 5%;">
+									<a href="bit.ly/sd-notebook">bit.ly/sd-notebook</a>
+								</p>
+							</p>
+						</div>
+						<div id="right">
+							<img src="./examples/assets/qr2.png" alt="">
+						</div>
+					</textarea>
+				</section>
 			</div>
 		</div>
 
