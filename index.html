@@ -41,6 +41,13 @@
 				z-index:-10;
 				width:50%;
 			  }
+			  .container {
+				display: flex;
+			  }
+
+			  .col {
+				flex: 1;
+			  }
 		</style>
 	</head>
 	<body>
@@ -122,7 +129,71 @@
 					  </textarea>
 				</section>
 				<!-- Slide 6 -->
-				
+				<section>
+					<section>
+						<p style="font-size: 150%; padding-bottom: 10%;">
+							Let's talk about
+							<a href="#/5"><strong>AutoEncoders</strong></a>
+						</p>
+					</section>
+					<section>
+						<img src="./examples/assets/autoencoder1.png">
+						Let's say we want to transfer this image of a dog over a network.
+					</section>
+					<section>
+						Long image data isn't compact and may take a long time to transfer over a network.
+					</section>
+					<section>
+						So... how do we overcome this network bandwidth bottleneck?
+					</section>
+					<section>
+						<img src="./examples/assets/autoencoder2.png">
+						<a href="#/5/4">The Plan:</a>
+						We can compress the image data at the source.
+						Then send the compressed image over the network.
+						Finally reconstruct the original image from the compressed one at the destination.
+					</section>
+					<section>
+						<p style="font-size: 150%; padding-bottom: 10%;">
+							A solid plan, right?
+						</p>
+					</section>
+					<section>The question is how do we compress the image and then reconstruct it?</section>
+					<section>
+						How do we <a href="#5/7">teach a neural network</a> compress the image and then reconstruct it?
+					</section>
+					<section>
+						We are surrounded by a lot of very high-dimensional data.
+						\[\begin{aligned}
+						x \in \mathbb{R}^{D}
+						\end{aligned} \]
+					</section>
+					<section>
+						<a href="#5/8">AutoEncoders</a> are a type of Unsupervised Neural Network that can learn a simple representation of the data.
+					</section>
+					<section>
+						<img src="./examples/assets/autoencoder4.png" alt="">
+					</section>
+					<section>
+						The objective of an Autoencoder is to learn a reconstruction loss $$ min Loss(x, r) $$ for a given set of high-dimensional data $$ x \in \mathbb{R}^{D} $$
+					</section>
+					<section>
+						AutoEncoders are easy to train, but they don't always produce good results.
+					</section>
+					<section>
+						Moreover, you can't generate new data from them.
+					</section>
+					<section>
+						<div class="container">
+							<div class="col">
+								If you want to learn more about AutoEncoders, you can check out this excellent video 👉
+							</div>
+							<div class="col">
+								<iframe width="560" height="315" src="https://www.youtube.com/embed/7mRfwaGGAPg?si=e068hmAARY2fgG5B" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+							</div>
+						</div>
+					</section>
+				</section>
 			</div>
 		</div>
 
@@ -130,6 +201,7 @@
 		<script src="plugin/notes/notes.js"></script>
 		<script src="plugin/markdown/markdown.js"></script>
 		<script src="plugin/highlight/highlight.js"></script>
+		<script src="plugin/math/math.js"></script>
 		<script>
 			// More info about initialization & config:
 			// - https://revealjs.com/initialization/
@@ -140,6 +212,7 @@
 				// Learn about plugins: https://revealjs.com/plugins/
 				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
 			});
+			Reveal.initialize({ plugins: [ RevealMath.KaTeX ] });
 		</script>
 	</body>
 </html>
