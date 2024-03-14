@@ -1,0 +1,756 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/night.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+		<style>
+			.circular_image {
+				width: 70%;
+				height: 70%;
+				border-radius: 50%;
+				overflow: hidden;
+				display:inline-block;
+				vertical-align:middle;
+			  }
+			  .circular_image img{
+				width:100%;
+			  }
+
+			  #left {
+				left:-8.33%;
+				text-align: left;
+				float: left;
+				width:50%;
+				z-index:-10;
+			  }
+			  
+			  #right {
+				left:31.25%;
+				top: 75px;
+				float: right;
+				text-align: right;
+				z-index:-10;
+				width:50%;
+			  }
+		</style>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<!-- Slide 1 -->
+				<section data-markdown>
+					<textarea data-template>
+					  ## Brain Tumor Segmentation using MONAI and WandB
+
+					  Presented by [Soumik Rakshit](https://geekyrakshit.dev/)
+					</textarea>
+				</section>
+				<!-- Slide 2 -->
+				<section data-markdown>
+					<textarea data-template>
+						<div id="left">
+							<p>
+								Follow along at <br>
+								<p style="padding-top: 5%;"><a href="bit.ly/monai-wandb-preso">geekyrakshit.dev/monai-wandb-preso</a></p>
+							</p>
+						</div>
+						<div id="right">
+							<img src="./examples/assets/qr1.png" alt="">
+						</div>
+					</textarea>
+				</section>
+				<!-- Slide 3 -->
+				<section data-markdown>
+					<textarea data-template>
+						<div id="left">
+							<img class="circular_image" src="https://geekyrakshit.dev/assets/soumik_rakshit.png" alt="">
+						</div>
+						<div id="right">
+							<p style="text-align: left; font-size: 80%; padding-bottom: 5%;">$>whoami</p>
+							<p style="text-align: left; font-size: 50%; line-height: 175%;">
+								👋 Building tools for ML <a href="https://wandb.ai/site">@WandB</a>.<br>
+								👋 Google Developer Expert in ML (JAX).<br>
+								👋 Former ML Research @IBM and @Ignitarium.<br>
+								👋 I build MLOps pipelines for open-source repositories (Keras, 🤗 Diffusers, MonAI, etc.)<br>
+								👋 I am actively working on <a href="https://github.com/soumik12345/wandb-addons"></a>WandB-Addons</a>.<br>
+								👋 Playing 🎻 between work; MineCraft and Elden Ring after work.<br>
+								👋 More about myself at <a href="https://geekyrakshit.dev/">geekyrakshit.dev</a>
+							</p>
+						</div>
+					</textarea>
+				</section>
+				<!-- Slide 4 -->
+				<section>
+					<section>
+						Machine Learning is revolutionizing many fields of medicine
+					</section>
+					<section>
+						accurate disease diagnosis
+					</section>
+					<section>
+						early prediction of adverse events
+					</section>
+					<section>
+						automatic discovery of antibiotics
+					</section>
+					<section>
+						LLMs deployed on clinical trial reporting
+					</section>
+					<section>
+						<p style="font-size: 150%; padding-bottom: 10%;"><a href="#/3/5"><strong>
+							Automatic Analysis of Medical Images
+						</strong></a></p>
+					</section>
+				</section>
+				<!-- Slide 5 -->
+				<section>
+					<p>Today we'll discuss</p>
+					<p style="font-size: 150%; padding-top: 10%;"><a href="#/4"><strong>
+						Segmentation of Brain Tumors from MRI Scans
+					</strong></a></p>
+				</section>
+				<!-- Slide 6 -->
+				<section data-markdown>
+					<textarea data-template>
+						<div id="left">
+							<img src="./examples/assets/image4.gif" alt="" style="height: 200%; width: 200%;">
+						</div>
+						<div id="right">
+							<p style="text-align: left; font-size: 80%; padding-bottom: 5%;">Why Semantic Segmentaion?</p>
+							<p style="text-align: left; font-size: 40%; line-height: 175%;">
+								⛑️ <a href="#/5">Semantic segmentation</a> refers to the process of transforming raw medical images into clinically relevant, spatially structured information, such as outlining tumor boundaries.<br>
+							</p>
+							<p style="text-align: left; font-size: 40%; line-height: 175%;">
+								⛑️ Semantic segmentation is an essential prerequisite for a number of clinical applications, such as <a href="#/5">radiotherapy planning</a> and <a href="#/5">treatment response monitoring</a>.<br>
+							</p>
+							<p style="text-align: left; font-size: 40%; line-height: 175%;">
+								⛑️ Semantic segmentation is, right now, the <a href="#/5">most widely investigated medical image processing task</a>, with <a href="#/5">~70%</a> of all biomedical image analysis challenges dedicated to it, according to the paper <a href="https://www.nature.com/articles/s41467-022-30695-9#Sec1">The Medical Segmentation Decathlon</a>.<br>
+							</p>
+						</div>
+					</textarea>
+				</section>
+				<!-- Slide 7 -->
+				<section>
+					<section>🛠️ Tools of the Trade</section>
+					<section><img src="https://raw.githubusercontent.com/Project-MONAI/MONAI/dev/docs/images/MONAI-logo-color.png" alt=""></section>
+					<section data-markdown>
+						<textarea data-template>
+							<p class="fragment fade-in-then-out">a set of open-source, freely available collaborative frameworks</p>
+							<p class="fragment fade-in-then-out">built for accelerating research and clinical collaboration in medical imaging</p>
+							<p class="fragment fade-in-then-out">accelerate the pace of innovation and clinical translation using a robust software framework</p>
+							<p class="fragment fade-in-then-out">covers nearly every level of medical imaging, deep learning research, and deployment</p>
+						</textarea>
+					</section>
+					<section data-background-color="rgb(255, 255, 255)">
+						<img src="https://raw.githubusercontent.com/wandb/assets/main/wandb-logo-yellow-dots-black-wb.svg" alt="">
+					</section>
+					<section data-markdown>
+						<textarea data-template>
+							<p class="fragment fade-in-then-out">the developer-first MLOps platform</p>
+							<p class="fragment fade-in-then-out">makes it easy to track your experiments, manage, and version your data</p>
+							<p class="fragment fade-in-then-out">collaborate with your team so you can focus on building the best models</p>
+							<p class="fragment fade-in-then-out">effortless model management and hyperparameter optimization</p>
+						</textarea>
+					</section>
+				</section>
+				<!-- Slide 8 -->
+				<section>
+					<section>
+						<p style="font-size: 150%;"><a href="https://medicaldecathlon.com/">
+							The Medical Decathlon Dataset
+						</a></p>
+					</section>
+					<section>
+						In this report, we will be focusing on training a deep neural network on the dataset for the
+						<a href="#/7/1">Brain Tumor Segmentation </a> task from the
+						<a href="https://medicaldecathlon.com/">Medical Segmentation Decathlon</a>.
+					</section>
+					<section>
+						<p class="fragment fade-in-then-out">The goal of this challenge is to produce segmentation labels of the different <strong>glioma</strong> sub regions</p>
+						<p class="fragment fade-in">Tumor core</p>
+						<p class="fragment fade-in">Whole tumor</p>
+						<p class="fragment fade-in">Enhancing tumor</p>
+					</section>
+				</section>
+				<!-- Slide 9 -->
+				<section>
+					<p style="font-size: 150%;">
+						💿 Loading and Exploring the Data
+					</p>
+				</section>
+				<!-- Slide 10 -->
+				<section>
+					<section>Step 1: Define the Transforms</section>
+					<section data-markdown><textarea data-template>
+						We define some transforms to be applied to our data after loading for the sake of pre-processing and batching.
+					</textarea></section>
+					<section data-markdown><textarea data-template>
+						We can do this easily using the [`monai.transforms`](https://docs.monai.io/en/stable/transforms.html) API
+						that provides a large collection of PyTorch-based transforms specific to medical imaging.
+					</textarea></section>
+					<section>
+						<p data-id="code-title">Defining the Transforms</p>
+						<pre data-id="code-animation"><code class="hljs python" data-trim data-line-numbers="|1,6-8|14-15|21-22|28-34|40-42|48-53|59-62|68-73|79-80"><script type="text/template">
+							from monai.transforms import *
+
+							train_transform = Compose(
+								[
+									
+									# Load tensors from the specified files.
+									# Load 4 Nifti images and stack them together.
+									LoadImaged(keys=["image", "label"]),
+
+									
+									
+									
+									
+									# Ensure channel-first ordering for images and labels.
+									EnsureChannelFirstd(keys="image"),
+									
+									
+									
+									
+									
+									# Convert the labels to BRATS classes.
+									ConvertToMultiChannelBasedOnBratsClassesd(keys="label"),
+									
+									
+									
+									
+									
+									# Resample the input image into the specified
+									# pixel dimension.
+									Spacingd(
+										keys=["image", "label"],
+										pixdim=(1.0, 1.0, 1.0),
+										mode=("bilinear", "nearest"),
+									),
+
+
+
+
+
+									# Change the orientation of the input image into the specified
+									# based on spatial axcodes.
+									Orientationd(keys=["image", "label"], axcodes="RAS"),
+									
+									
+									
+									
+									
+									# Crop image with random size or specifically sized
+									# region-of-interest.
+									RandSpatialCropd(
+										keys=["image", "label"],
+										roi_size=[224, 224, 144], random_size=False
+									),
+
+
+
+
+
+									# Random flip images and labels across all the apatial axes
+									RandFlipd(keys=["image", "label"], prob=0.5, spatial_axis=0),
+									RandFlipd(keys=["image", "label"], prob=0.5, spatial_axis=1),
+									RandFlipd(keys=["image", "label"], prob=0.5, spatial_axis=2),
+									
+									
+									
+									
+									
+									# Normalize and randomly scale inputs based on intensity.
+									NormalizeIntensityd(
+											keys="image", nonzero=True, channel_wise=True
+									),
+									RandScaleIntensityd(keys="image", factors=0.1, prob=1.0),
+									RandShiftIntensityd(keys="image", offsets=0.1, prob=1.0),
+									
+									
+									
+									
+									
+									# Ensure the input data to be a PyTorch Tensor or numpy array.
+									EnsureTyped(keys=["image", "label"]),
+								]
+							)
+						</script></code></pre>
+					</section>
+				</section>
+				<!-- Slide 11 -->
+				<section>
+					<p style="font-size: 150%;">🐝 <a href="#/10">Quiz Time...</a><br></p>
+					<p class="fragment fade-in">
+						What would be the difference between the transforms applied to the
+						training data and the validation data?
+					</p>
+				</section>
+				<!-- Slide 12 -->
+				<section>
+					<section>Step 2: Create the Dataloader</section>
+					<section data-markdown><textarea data-template>
+						We use [`monai.apps.DecathlonDataset`](https://docs.monai.io/en/stable/apps.html#monai.apps.DecathlonDataset)
+						to automatically download the data of Medical Segmentation Decathlon challenge and generate items
+						for training, validation or test.
+					</textarea></section>
+					<section>
+						<p data-id="code-title">Defining the Dataloader</p>
+						<pre data-id="code-animation"><code class="hljs python" data-trim data-line-numbers="|1,4-9|2,11-14|"><script type="text/template">
+							from monai.apps import DecathlonDataset
+							from monai.data import DataLoader
+
+							train_ds = DecathlonDataset(
+								root_dir=artifact_dir, task="Task01_BrainTumour",
+								transform=train_transform, section="training",
+								download=True, cache_rate=0.0,
+								num_workers=config.num_workers,
+							)
+
+							train_loader = DataLoader(
+								train_ds, batch_size=config.train_batch_size,
+								shuffle=True, num_workers=config.num_workers
+							)
+						</script></code></pre>
+					</section>
+				</section>
+				<!-- Slide 13 -->
+				<section>
+					<section>Step 3: Visualizing the Data</section>
+					<section data-markdown><textarea data-template>
+						We use the images and segmentation maps as
+						[`wandb.Image`](https://docs.wandb.ai/ref/python/data-types/image) which enables us to log the
+						semantic segmentation masks on our W&B dashboard and explore the data in an
+						interactive manner via the UI.
+					</textarea></section>
+					<section>
+						<p data-id="code-title">Visualizing the Data</p>
+						<pre data-id="code-animation"><code class="hljs python" data-trim data-line-numbers="|1|3-8|10-21|"><script type="text/template">
+							mask_data = np.array([[1, 2, 2, ... , 2, 2, 1], ...])
+
+							class_labels = {
+								0: "background",
+								1: "Tumor core",
+								2: "Whole tumor",
+								3: "Enhancing tumor"
+							}
+
+							mask_img = wandb.Image(
+								image, masks={
+									"predictions": {
+										"mask_data": mask_data,
+										"class_labels": class_labels
+									},
+									"ground_truth": {
+										...
+									},
+									...
+								}
+							)
+						</script></code></pre>
+					</section>
+					<section>
+						<iframe src="https://wandb.ai/geekyrakshit/brain-tumor-segmentation/reports/Brain-Tumor-Segmentation-Data--Vmlldzo2Nzc5OTQz" style="border:none;height:700px;width:100%"></iframe>
+					</section>
+				</section>
+				<!-- Slide 14 -->
+				<section>
+					<section>
+						<p style="font-size: 150%;"><a href="https://medicaldecathlon.com/">
+							Training a Baseline Segmentation Model
+						</a></p>
+					</section>
+					<section data-markdown><textarea data-template>
+						We will train a simple [SegResNet](#/13/1) model based on the paper
+						[3D MRI brain tumor segmentation using autoencoder regularization](https://arxiv.org/abs/1810.11654).
+					</textarea></section>
+				</section>
+				<!-- Slide 15 -->
+				<section>
+					<section>Step 1: Define the Model</section>
+					<section data-markdown><textarea data-template>
+						We use the [`monai.networks.nets.SegResNet`](https://docs.monai.io/en/stable/networks.html#segresnet)
+						which implements the SegResNet architecture out-of-the-box.
+					</textarea></section>
+					<section>
+						<p data-id="code-title">Defining the Model</p>
+						<pre data-id="code-animation"><code class="hljs python" data-trim data-line-numbers><script type="text/template">
+							from monai.networks.nets import SegResNet
+
+							# Define the model
+							model = SegResNet(
+								blocks_down=config.blocks_down,
+								blocks_up=config.blocks_up,
+								init_filters=config.init_filters,
+								in_channels=4,
+								out_channels=3,
+								dropout_prob=config.dropout_prob,
+							).to(device)
+						</script></code></pre>
+					</section>
+					<section data-markdown><textarea data-template>
+						We use the [`monai.losses.DiceLoss`](https://docs.monai.io/en/stable/losses.html#diceloss)
+						as our loss function. It computes the average Dice loss between two tensors and works for both
+						multi-classes and multi-label tasks.
+					</textarea></section>
+					<section>
+						<p data-id="code-title">Defining the Loss Function</p>
+						<pre data-id="code-animation"><code class="hljs python" data-trim data-line-numbers><script type="text/template">
+							from monai.losses import DiceLoss
+
+							# Define the loss function
+							loss_function = DiceLoss(
+								smooth_nr=config.smooth_nr,
+								smooth_dr=config.smooth_dr,
+								squared_pred=True,
+								to_onehot_y=False,
+								sigmoid=True,
+							)
+						</script></code></pre>
+					</section>
+					<section data-markdown><textarea data-template>
+						We use the [`monai.metrics.DiceMetric`](https://docs.monai.io/en/stable/metrics.html#monai.metrics.DiceMetric)
+						that computes the average Dice score between two tensors and supports both multi-classes and multi-labels tasks.
+					</textarea></section>
+					<section>
+						<p data-id="code-title">Defining the Metric for Validation</p>
+						<pre data-id="code-animation"><code class="hljs python" data-trim data-line-numbers><script type="text/template">
+							from monai.metrics import DiceMetric
+
+							# Define the metric
+							dice_metric = DiceMetric(
+								include_background=True, reduction="mean"
+							)
+						</script></code></pre>
+					</section>
+					<section data-markdown><textarea data-template>
+						Before we start training, We invoke the [wandb.watch()](https://docs.wandb.ai/ref/python/watch)
+						function on our model and loss function in order to hook into the Pytorch model and automatically
+						collect and log gradients and the topology.
+					</textarea></section>
+					<section>
+						<p data-id="code-title">Logging Model Gradients and Topology</p>
+						<pre data-id="code-animation"><code class="hljs python" data-trim data-line-numbers><script type="text/template">
+							import wandb
+
+							# Hook into the torch model to collect
+							# gradients and the topology
+							wandb.watch(model, criterion=loss_function)
+						</script></code></pre>
+					</section>
+				</section>
+				<!-- Slide 16 -->
+				<section>
+					<p style="font-size: 150%;">🐝 <a href="#/15">Quiz Time...</a><br></p>
+					<p class="fragment fade-in">
+						What does the Dice Loss mean?
+					</p>
+				</section>
+				<!-- Slide 17 -->
+				<section>
+					<section>Step 2: A PyTorch Training and Validation Loop</section>
+					<section>
+						<p data-id="code-title">
+							A simple PyTorch training step with <a href="#/16/1"><code>wandb.log()</code></a>
+						</p>
+						<pre data-id="code-animation"><code class="hljs python" data-trim data-line-numbers="|3-4|6-12|14-18|20-25|27-32|34-39|"><script type="text/template">
+							scaler = torch.cuda.amp.GradScaler()
+							
+							# Loop over the data batches from the train dataloader
+							for batch_data in train_loader:
+								
+								# Unpack the inputs and ground true labels
+								# from the data batch
+								global_step += 1
+								inputs, labels = (
+									batch_data["image"].to(device),
+									batch_data["label"].to(device)
+								)
+								
+								# for every training step, we need to explicitly
+								# set the gradients to zero before starting
+								# backwar pass because PyTorch accumulates the
+								# gradients on subsequent backward passes.
+								optimizer.zero_grad()
+								
+								# for mixed-precision training, we wrap the
+								# forward passes of the, including the
+								# loss computations with autocast.
+								with torch.cuda.amp.autocast():
+									outputs = model(inputs)
+									loss = loss_function(outputs, labels)
+								
+								# For mixed-precision training, gradient scaling is
+								# used to prevent underflow of gradients by
+								# multiplying the network’s loss by a scale factor.
+								scaler.scale(loss).backward()
+								scaler.step(optimizer)
+								scaler.update()
+								
+								# Adding Weights & Biases logging to a
+								# PyTorch training step
+								wandb.log({
+									"batch/batch_step": global_step,
+									"batch/loss": loss.item(),
+								})
+						</script></code></pre>
+					</section>
+					<section>
+						<p data-id="code-title">
+							A simple PyTorch validation step with <a href="#/16/1"><code>wandb.log()</code></a>
+						</p>
+						<pre data-id="code-animation"><code class="hljs python" data-trim data-line-numbers="|1-4|8-16|18-31|33-44|"><script type="text/template">
+							# For the validation step, we need to set the model to
+							# evaluation mode and disable gradient computations.
+							model.eval()
+							with torch.no_grad():
+								
+								for val_data in val_loader:
+									
+									# Perform inference and compute
+									# the Dice metric for each class
+									val_inputs, val_labels = (
+										val_data["image"].to(device),
+										val_data["label"].to(device),
+									)
+									val_outputs = inference(val_inputs)
+									dice_metric(y_pred=val_outputs, y=val_labels)
+									dice_metric_batch(y_pred=val_outputs, y=val_labels)
+									
+								# Save model checkpoint
+								checkpoint_file = os.path.join(
+									checkpoint_dir, f"best_metric_model_{epoch}.pth"
+								)
+								torch.save(model.state_dict(), checkpoint_file)
+								
+								# Log model checkpoint as W&B artifacts
+								artifact = wandb.Artifact(
+									f'{wandb.run.id}-checkpoint', type='model'
+								)
+								artifact.add_file(checkpoint_file)
+								wandb.log_artifact(
+									artifact, aliases=[f"epoch_{epoch}", "latest"]
+								)
+								
+								# Aggregate the metrics and log them to Weights & Biases
+								metric = dice_metric.aggregate().item()
+								metric_batch = dice_metric_batch.aggregate()
+								dice_metric.reset()
+								dice_metric_batch.reset()
+								wandb.log({
+									"epoch/epoch": epoch,
+									"epoch/mean_loss": epoch_loss,
+									"epoch/dice_tumor_core": metric_batch[0].item(),
+									"epoch/dice_whole_tumor": metric_batch[1].item(),
+									"epoch/dice_enhancing_tumor": metric_batch[2].item(),
+								})
+						</script></code></pre>
+					</section>
+					<section>
+						<p data-id="code-title">
+							Put together the <a href="#/16/3">training loop</a>
+						</p>
+						<pre data-id="code-animation"><code class="hljs python" data-trim data-line-numbers="|2-3|5-7|"><script type="text/template">
+							for epoch in range(epochs):
+								model.train()
+								execute training step....
+
+								if epoch % val_interval == 0:
+									model.eval()
+									execute validation step....
+						</script></code></pre>
+					</section>
+					<section>
+						<iframe src="https://wandb.ai/geekyrakshit/brain-tumor-segmentation/reports/Baseline-Training--Vmlldzo2NzgwNzEw" style="border:none;height:700px;width:100%"></iframe>
+					</section>
+				</section>
+				<!-- Slide 18 -->
+				<section>
+					<p style="font-size: 150%;">🐝 <a href="#/17">Quiz Time...</a><br></p>
+					<p class="fragment fade-in">
+						Why do we need to scale the loss during mixed precision training step?
+					</p>
+				</section>
+				<!-- Slide 19 -->
+				<section>
+					<section>
+						<p style="font-size: 150%;"><a href="#/18">
+							HyperParameter Optimization using Sweeps
+						</a></p>
+					</section>
+					<section data-markdown>
+						<textarea data-template>
+							A [Weights & Biases Sweep](#/18/1) combines a strategy for exploring hyperparameter values
+							with the code that evaluates them.
+						</textarea>
+					</section>
+					<section>
+						<p data-id="code-title">
+							Sweep configuration using a simple Python dictionary
+						</p>
+						<pre data-id="code-animation"><code class="hljs python" data-trim data-line-numbers="|2-4|6-11|13-26|16-17|19-24|"><script type="text/template">
+							sweep_configuration = {
+								# Define Hyperparameter exploration strategy,
+								# in this case, it is Bayesian Optimization and Hyperband.
+								'method': 'bayes',
+								
+								# Define Hyperparameter optimization goal,
+								# in this case, it is to maximize the per-epoch dice score.
+								'metric': {
+									'goal': 'maximize', 
+									'name': 'epoch/dice_mean'
+								},
+								
+								# Define hyperparameter bounds to search
+								'parameters': {
+									
+									# Discrete Hyperparameter values
+									'init_filters': {'values': [8, 16, 32]},
+									
+									# Continuous distribution of Hyperparameter values
+									'dropout_prob': {'max': 0.5, 'min': 0.1},
+									'smooth_nr':  {'max': 1e-4, 'min': 1e-6},
+									'smooth_dr':  {'max': 1e-4, 'min': 1e-6},
+									'learning_rate':  {'max': 1e-3, 'min': 1e-6},
+									'weight_decay':  {'max': 1e-3, 'min': 1e-6},       
+								}
+							}
+						</script></code></pre>
+					</section>
+					<section>
+						<p data-id="code-title">
+							Executing the Sweep
+						</p>
+						<pre data-id="code-animation"><code class="hljs python" data-trim data-line-numbers="|1-5|7-15|"><script type="text/template">
+							# Create a sweep
+							sweep_id = wandb.sweep(
+								sweep=sweep_configuration,
+								project='brain-tumor-segmentation'
+							)
+
+							# Execute the sweep using a sweep agent
+							wandb.agent(
+								sweep_id,
+								# the function for training and validation with the code
+								# instrumented with Weights & Biases logging
+								function=main,
+								# Maximum number of iterations for the sweep
+								count=20
+							)
+						</script></code></pre>
+					</section>
+					<section>
+						<iframe src="https://wandb.ai/geekyrakshit/brain-tumor-segmentation/reports/Hyperparameter-Optimization-using-Sweeps--Vmlldzo2NzgwOTcy" style="border:none;height:700px;width:100%"></iframe>
+					</section>
+				</section>
+				<!-- Slide 20 -->
+				<section>
+					<section>
+						<p style="font-size: 150%;"><a href="#/19">
+							🏋️ Training the Best Model
+						</a></p>
+					</section>
+					<section>
+						<p data-id="code-title">
+							Let's fetch the best set of hyperparameters from the sweep
+						</p>
+						<pre data-id="code-animation"><code class="hljs python" data-trim data-line-numbers><script type="text/template">
+							api = wandb.Api()
+
+							sweep = api.sweep("<entity>/<project>/<sweep_id>")
+							runs = sorted(
+								sweep.runs, key=lambda run: run.summary.get("val_acc", 0), reverse=True
+							)
+							best_run = runs[0]
+
+							best_run_config = best_run.config
+						</script></code></pre>
+					</section>
+					<section>
+						<iframe src="https://wandb.ai/geekyrakshit/brain-tumor-segmentation/reports/Training-with-the-Best-Set-of-Hyperparameters--Vmlldzo2NzgxMjAx" style="border:none;height:700px;width:100%"></iframe>
+					</section>
+				</section>
+				<!-- Slide 21 -->
+				<section>
+					<section>
+						<p style="font-size: 150%;"><a href="#/20">
+							🏋️‍♀️ Time for some Excercise
+						</a></p>
+					</section>
+					<section data-markdown>
+						<textarea data-template>
+							<div id="left">
+								<p>
+									Train your own model for Brain Tumor Segmentation using MonAI and WandB <br>
+									<p style="padding-top: 5%;"><a href="http://wandb.me/monai-brats-colab">wandb.me/monai-brats-colab</a></p>
+								</p>
+							</div>
+							<div id="right">
+								<img src="./examples/assets/qr2.png" alt="">
+							</div>
+						</textarea>
+					</section>
+				</section>
+				<!-- Slide 22 -->
+				<section>
+					<section>
+						<p style="font-size: 150%;"><a href="#/20">
+							Read the Detailed Report on <a href="https://wandb.ai/fc">Fully Connected</a>
+						</a></p>
+					</section>
+					<section>
+						<iframe src="https://wandb.ai/geekyrakshit/brain-tumor-segmentation/reports/Brain-Tumor-Segmentation-using-MONAI-and-WandB---Vmlldzo0MjUzODIw" style="border:none;height:700px;width:100%"></iframe>
+					</section>
+				</section>
+				<!-- Slide 24 -->
+				<section>
+					<section>
+						<p style="font-size: 150%;"><a href="#/20">
+							Acknowledgements
+						</a></p>
+					</section>
+					<section>
+						This presentation was made using <a href="https://revealjs.com/">Reveal.js</a>.
+					</section>
+					<section>
+						The interactive dashboards were made using
+						<a href="https://docs.wandb.ai/guides/reports">Weights & Biases Reports</a>.
+					</section>
+					<section>
+						Gratitude to <a href="https://www.linkedin.com/in/integratorbrad/">Brad Genereaux</a>
+						from NVIDIA for his crucial feedback on the presentation.
+					</section>
+				</section>
+				<!-- Slide 24 -->
+				<section>
+					<p style="font-size: 150%;"><a href="#/20">
+						Thank You 🙏
+					</a></p>
+				</section>
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+		</script>
+	</body>
+</html>
