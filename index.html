@@ -126,6 +126,16 @@
 					<section>
 						Finally, we will look at some of the recent advancements in diffusion models and their applications.
 					</section>
+					<section>
+						<p>
+							<a href="#3/8">Disclaimer:</a> The landscape of Diffusion models is ever-changing.
+							This presentation does not cover some of the most recent Diffusion Models like <a href="https://stability.ai/news/stable-diffusion-3">Stable Diffusion 3</a>, <a href="https://stability.ai/news/introducing-stable-cascade">Stable Cascade</a>, or <a href="https://github.com/PixArt-alpha/PixArt-sigma">Pixart-Σ</a>.
+						</p>
+						<p>
+							Hopefully, by the end of this presentation, you will have a good understanding of the landscape of Diffusion Models which will enable you to explore the latest models yourselves.
+						</p>
+						<p>🤗</p>
+					</section>
 				</section>
 				<!-- Slide 5 -->
 				<section data-markdown>
@@ -425,10 +435,18 @@
 						To condition the image generation on textual inputs, Stable Diffusion leverages embeddings from a model like <a href="https://arxiv.org/abs/2103.00020">CLIP (Contrastive Language–Image Pre-training)</a>, which understands and aligns the semantics of text and images. These embeddings guide the reverse diffusion process towards generating images that match the text description.
 					</section>
 					<section>
-						The core of Stable Diffusion's architecture involves an autoencoder that compresses images into a lower-dimensional latent space and decompresses them back to image space. The autoencoder consists of an encoder that maps high-resolution images into a compact latent representation, and a decoder that reconstructs images from this latent space.
+						<p>The <a href="#16/6">Cross-Attention</a> mechanism enables us to combine the latent image representation with the text embedding.</p>
+						
+						<p>This process allows the model to <a href="#16/6">attend</a> to relevant parts of the text embedding while modifying the latent image.</p>
+					</section>
+					<section>
+						Stable Diffusion's architecture also involves a <a href="#16/7">Variational AutoEncoder</a> that compresses images into a lower-dimensional latent space and decompresses them back to image space. The autoencoder consists of an encoder that maps high-resolution images into a compact latent representation, and a decoder that reconstructs images from this latent space.
 					</section>
 					<section>
 						By operating in a latent space, Stable Diffusion requires less computational power and memory than models that operate directly on pixels, making high-quality text-to-image generation more accessible.
+					</section>
+					<section>
+						<iframe src="https://wandb.ai/wandb/cross-attention-control/reports/Improving-Generative-Images-with-Instructions-Prompt-to-Prompt-Image-Editing-with-Cross-Attention-Control--VmlldzoyNjk2MDAy" style="border:none;height:1024px;width:100%"></iframe>
 					</section>
 					<section data-markdown>
 						<textarea data-template>
