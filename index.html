@@ -92,7 +92,7 @@
 								👋 I build MLOps pipelines for open-source repositories (Keras, 🤗 Diffusers, MonAI, etc.)<br>
 								👋 I am actively working on <a href="https://github.com/soumik12345/wandb-addons"></a>WandB-Addons</a>.<br>
 								👋 Playing 🎻 between work; MineCraft and Elden Ring after work.<br>
-								👋 বাঙালি (বং নয়)
+								👋 বাঙালি (বং নয়)।<br>
 								👋 More about myself at <a href="https://geekyrakshit.dev/">geekyrakshit.dev</a>
 							</p>
 						</div>
@@ -401,7 +401,7 @@
 				<section>
 					<section>
 						<p style="font-size: 150%; padding-bottom: 10%;">
-							<a href="#/16"><strong>Stable Diffusion</strong></a>
+							<a href="#16"><strong>Stable Diffusion</strong></a>
 						</p>
 					</section>
 					<section>
@@ -416,7 +416,10 @@
 						Stable Diffusion is a Latent Diffusion Model that is trained to generate high-quality images from text prompts.
 					</section>
 					<section>
-						To condition the image generation on textual inputs, Stable Diffusion leverages embeddings from a model like CLIP (Contrastive Language–Image Pre-training), which understands and aligns the semantics of text and images. These embeddings guide the reverse diffusion process towards generating images that match the text description.
+						Stable Diffusion 1.4 consists of <a href="#16/4">~860M parameters</a> and is trained on a large-scale dataset of high-resolution images.
+					</section>
+					<section>
+						To condition the image generation on textual inputs, Stable Diffusion leverages embeddings from a model like <a href="https://arxiv.org/abs/2103.00020">CLIP (Contrastive Language–Image Pre-training)</a>, which understands and aligns the semantics of text and images. These embeddings guide the reverse diffusion process towards generating images that match the text description.
 					</section>
 					<section>
 						The core of Stable Diffusion's architecture involves an autoencoder that compresses images into a lower-dimensional latent space and decompresses them back to image space. The autoencoder consists of an encoder that maps high-resolution images into a compact latent representation, and a decoder that reconstructs images from this latent space.
@@ -450,6 +453,11 @@
 					<section>
 						<a href="https://arxiv.org/pdf/2306.00637.pdf">Würstchen</a> is another powerful text-to-image generation model developed by <a href="https://huggingface.co/warp-ai">WarpAI</a>.
 					</section>
+					<section>
+						<img src="./examples/assets/wtcn.png" alt="">
+						<a href="https://arxiv.org/pdf/2306.00637.pdf">Würstchen</a> introduces a three-stage process for image synthesis, achieving significant computational efficiency, allowing a 1B parameter model to be trained in approximately 9,200 GPU hours, compared to the 150,000 GPU hours used by Stable Diffusion 1.4.
+					</section>
+
 					<section data-markdown>
 						<textarea data-template>
 							<div id="left">
